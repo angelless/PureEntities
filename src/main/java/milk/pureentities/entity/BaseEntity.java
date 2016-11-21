@@ -77,7 +77,6 @@ public abstract class BaseEntity extends EntityCreature{
         return this.followTarget != null ? this.followTarget : (this.target instanceof Entity ? (Entity) this.target : null);
     }
 
-    //TODO
     public void setTarget(Entity target){
         this.followTarget = target;
 
@@ -97,7 +96,7 @@ public abstract class BaseEntity extends EntityCreature{
         if(this.namedTag.contains("WallCheck")){
             this.setWallCheck(this.namedTag.getBoolean("WallCheck"));
         }
-        this.setDataProperty(new ByteEntityData(DATA_NO_AI, (byte) 1));
+        this.setDataFlag(DATA_FLAGS, DATA_FLAG_IMMOBILE);
     }
 
     public void saveNBT(){
@@ -110,7 +109,8 @@ public abstract class BaseEntity extends EntityCreature{
     public void spawnTo(Player player){
         if(!this.hasSpawned.containsKey(player.getLoaderId()) && player.usedChunks.containsKey(Level.chunkHash(this.chunk.getX(), this.chunk.getZ()))){
             AddEntityPacket pk = new AddEntityPacket();
-            pk.eid = this.getId();
+            pk.entityUniqueId = this.getId();
+            pk.entityRuntimeId = this.getId();
             pk.type = this.getNetworkId();
             pk.x = (float) this.x;
             pk.y = (float) this.y;
